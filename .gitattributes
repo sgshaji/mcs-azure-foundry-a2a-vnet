@@ -1,0 +1,13 @@
+# Normalize line endings. Repo stores LF; see the .tf exception below.
+* text=auto eol=lf
+
+# Terraform files stay CRLF on checkout: the Storage Blob Data Owner ABAC
+# `condition` is a line-ending-sensitive heredoc stored as CRLF in existing
+# state. Running `terraform fmt` rewrites to LF — re-normalize to CRLF after.
+*.tf text eol=crlf
+
+# Binary assets
+*.svg binary
+*.docx binary
+*.png binary
+*.jpg binary

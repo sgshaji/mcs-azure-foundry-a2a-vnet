@@ -1,0 +1,67 @@
+# ---- Terraform ----
+# Provider plugins and working dirs (large; machine-specific)
+**/.terraform/*
+.terraform.tfstate.lock.info
+
+# State files — may contain secrets and resource identifiers. NEVER commit.
+*.tfstate
+*.tfstate.*
+*.tfstate.backup
+
+# Saved plans — can contain sensitive values, and are environment-specific
+tfplan
+tfplan.*
+*.tfplan
+*.tfplan.*
+
+# Crash logs
+crash.log
+crash.*.log
+
+# Variable files — environment-specific; keep the *.example instead
+*.tfvars
+*.tfvars.json
+!*.tfvars.example
+
+# CLI config
+.terraformrc
+terraform.rc
+
+# NOTE: .terraform.lock.hcl IS committed on purpose (pins provider versions).
+
+# ---- Python (a2a-wrapper) ----
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# ---- Secrets / local env ----
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# ---- OS / editor cruft ----
+.DS_Store
+Thumbs.db
+*.swp
+*~
+.vscode/
+.idea/
+
+# Microsoft Office lock/temp files (e.g. ~$doc.docx)
+~$*
+
+# Generated Word deliverables (the source lives in docs/architecture.md).
+# Remove this line if you want to track the .docx in the repo.
+*.docx

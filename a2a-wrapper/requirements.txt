@@ -1,0 +1,20 @@
+# A2A server surface
+# Pin to the 0.2.x line: this app's imports (a2a.server.apps, a2a.server.request_handlers,
+# a2a.server.tasks, a2a.utils.new_agent_text_message) target the 0.2 module layout.
+# The 1.x major reorganized these modules and breaks `from a2a.server.apps import ...`.
+a2a-sdk>=0.2.5,<0.3.0
+
+# ASGI host
+starlette>=0.37.0
+uvicorn[standard]>=0.30.0
+
+# Inbound OAuth (Entra) token validation
+PyJWT[crypto]>=2.9.0
+
+# Foundry backend (create-or-get agent + invoke)
+# Pin to the 1.x line: foundry_client.py targets the 1.x agents surface
+# (agents.list_agents / agents.threads.create / agents.runs.create_and_process /
+# agents.messages.create/list). The 2.x major restructured the agents API and
+# drops `list_agents`, so an unpinned `>=1.0.0` grabs 2.x and breaks at runtime.
+azure-identity>=1.19.0
+azure-ai-projects>=1.0.0,<2.0.0
