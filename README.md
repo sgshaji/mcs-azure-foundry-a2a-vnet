@@ -8,6 +8,27 @@ Container Apps.
 The Foundry agent and all of its data stores stay fully private. The wrapper is the only
 component with a public surface, and it reaches Foundry over the virtual network.
 
+## Delivery problem and evidence
+
+An external agent client needs a reachable discovery and invocation endpoint, while the
+Foundry agent and its data stores must remain behind private endpoints. This repository
+implements that boundary rather than treating an agent connection as just a model call.
+
+| Constraint | Engineering decision |
+|---|---|
+| External clients cannot directly reach a private backend | A Container Apps broker exposes HTTPS ingress and uses VNet-integrated egress |
+| Discovery and invocation have different access requirements | Public agent-card discovery; Entra-authenticated A2A invocation |
+| The broker needs to call Foundry without a stored service key | A user-assigned managed identity with a project role |
+| A reviewer needs to inspect both application and infrastructure | [Python broker](a2a-wrapper/) and [Terraform source](infra/) are included |
+
+**Start here:** [architecture and integration findings](docs/architecture.md),
+[deployment steps](#quick-start), and [authentication boundary](#security-model).
+
+**Scope:** a reference architecture and implementation. The integration notes record the
+original validation; no fresh Azure deployment, authenticated end-to-end run, or production
+readiness assessment was performed for this documentation update. The broker is public-facing;
+"private" describes the Foundry backend and data stores, not the entire request path.
+
 ```mermaid
 flowchart LR
     CS["Copilot Studio<br/>(public SaaS)"]
@@ -144,8 +165,11 @@ Then point the Container App at it and (optionally) toggle auth, and re-apply:
 ```hcl
 # infra/terraform.tfvars
 wrapper_image        = "<acr-login-server>/a2a-wrapper:v1"
-wrapper_auth_enabled = false   # start false to validate connectivity, then enable
+wrapper_auth_enabled = true
 ```
+
+Configure the audience and caller permissions in **Inbound authentication** before invoking
+the broker. Do not expose an unauthenticated invocation endpoint as a production setup.
 
 ```bash
 cd infra && terraform apply
